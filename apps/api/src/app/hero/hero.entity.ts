@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
+import { Anime } from '../anime/anime.entity';
 
 @Entity()
 @Unique(['name'])
@@ -17,4 +24,7 @@ export class Hero {
 
   @Column({ nullable: true })
   gender?: 'male' | 'female' | 'other';
+
+  @ManyToOne(() => Anime)
+  anime?: Anime;
 }

@@ -11,8 +11,8 @@ export class HeroService {
     private heroRepository: Repository<Hero>
   ) {}
 
-  async create(hero: Hero): Promise<Hero> {
-    return await this.heroRepository.save(hero);
+  create(hero: Hero): Promise<Hero> {
+    return this.heroRepository.save(hero);
   }
 
   update(hero: Hero): Promise<UpdateResult> {
@@ -24,15 +24,15 @@ export class HeroService {
   }
 
   findAll(): Promise<Hero[]> {
-    return this.heroRepository.find();
+    return this.heroRepository.find({ relations: ['anime'] });
   }
 
   findById(id: string): Promise<Hero> {
-    return this.heroRepository.findOne(id);
+    return this.heroRepository.findOne({ relations: ['anime'], where: { id } });
   }
 
   findByName(name: string): Promise<Hero[]> {
-    return this.heroRepository.find({ name });
+    return this.heroRepository.find({ relations: ['anime'], where: { name } });
   }
 
   remove(id: string): Promise<DeleteResult> {

@@ -77,12 +77,20 @@ export class AnimeController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<DeleteResult> {
-    return this.animeService.remove(id);
+  async remove(@Param('id') id: string): Promise<DeleteResult> {
+    try {
+      return await this.animeService.remove(id);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
   @Delete()
-  removeAll(): void {
-    this.animeService.removeAll();
+  async removeAll(): Promise<void> {
+    try {
+      await this.animeService.removeAll();
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 }

@@ -11,8 +11,8 @@ export class AnimeService {
     private animeRepository: Repository<Anime>
   ) {}
 
-  async create(anime: Anime): Promise<Anime> {
-    return await this.animeRepository.save(anime);
+  create(anime: Anime): Promise<Anime> {
+    return this.animeRepository.save(anime);
   }
 
   update(anime: Anime): Promise<UpdateResult> {

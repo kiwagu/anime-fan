@@ -10,6 +10,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { AnimeService } from '../anime/anime.service';
 
 import { CreateHeroDTO } from './dto/create-hero.dto';
 import { UpdateHeroDTO } from './dto/update-hero.dto';
@@ -18,7 +19,10 @@ import { HeroService } from './hero.service';
 
 @Controller('hero')
 export class HeroController {
-  constructor(private readonly heroService: HeroService) {}
+  constructor(
+    private readonly heroService: HeroService,
+    private readonly animeService: AnimeService
+  ) {}
 
   @Post()
   async create(@Body() createHeroDto: CreateHeroDTO): Promise<Hero> {
@@ -28,6 +32,8 @@ export class HeroController {
     hero.description = createHeroDto?.description;
     hero.age = createHeroDto?.age;
     hero.gender = createHeroDto?.gender;
+
+    await this.assignAnime(hero, createHeroDto?.animeId);
 
     try {
       return await this.heroService.create(hero);
@@ -51,10 +57,11 @@ export class HeroController {
 
     hero.id = existingHero.id;
     hero.name = updateHeroDto?.name || existingHero.name;
-    hero.description =
-      updateHeroDto?.description || existingHero.description;
+    hero.description = updateHeroDto?.description || existingHero.description;
     hero.age = updateHeroDto?.age || existingHero.age;
     hero.gender = updateHeroDto?.gender || existingHero.gender;
+
+    await this.assignAnime(hero, updateHeroDto?.animeId);
 
     try {
       return await this.heroService.update(hero);
@@ -77,12 +84,30 @@ export class HeroController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<DeleteResult> {
-    return this.heroService.remove(id);
+  async remove(@Param('id') id: string): Promise<DeleteResult> {
+    try {
+      return await this.heroService.remove(id);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
   @Delete()
-  removeAll(): void {
-    this.heroService.removeAll();
+  async removeAll(): Promise<void> {
+    try {
+      await this.heroService.removeAll();
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
+
+  private assignAnime = async (hero: Hero, id: string) => {
+    if (id) {
+      const anime = await this.animeService.findById(id);
+      if (!anime) {
+        throw new NotFoundException(`Anime with id: ${id} not found`);
+      }
+      hero.anime = anime;
+    }
+  };
 }
