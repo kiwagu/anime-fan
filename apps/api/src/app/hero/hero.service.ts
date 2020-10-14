@@ -1,72 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { CreateHeroDTO } from './dto/create-hero.dto';
-import { UpdateHeroDTO } from './dto/update-hero.dto';
-import { Hero } from './hero.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
-const heroes: Hero[] = [
-  { id: '1', name: 'Erlic', description: 'Main hero', age: 12, gender: 'male' },
-  { id: '2', name: 'Mustang', age: 30 },
-  { id: '3', name: 'Riza', gender: 'female' },
-];
+import { Hero } from './hero.entity';
 
 @Injectable()
 export class HeroService {
-  private lastUserIndex = Number(heroes[heroes.length - 1].id) + 1;
+  constructor(
+    @InjectRepository(Hero)
+    private heroRepository: Repository<Hero>
+  ) {}
 
-  create(createUserDto: CreateHeroDTO): Hero {
-    const hero = new Hero();
-    hero.id = String(this.lastUserIndex++);
-    hero.name = createUserDto.name;
-    hero.description = createUserDto?.description;
-    hero.age = createUserDto?.age;
-    hero.gender = createUserDto?.gender;
-
-    heroes.push(hero);
-
-    return hero;
+  async create(hero: Hero): Promise<Hero> {
+    return await this.heroRepository.save(hero);
   }
 
-  update(id: string, updateUserDto: UpdateHeroDTO): Hero {
-    const heroId = heroes.findIndex((hero) => hero.id === id);
-
-    if (heroId > 0) {
-      heroes[heroId].name = updateUserDto?.name || heroes[heroId].name;
-      heroes[heroId].description =
-        updateUserDto?.description || heroes[heroId]?.description;
-      heroes[heroId].age = updateUserDto?.age || heroes[heroId]?.age;
-      heroes[heroId].gender = updateUserDto?.gender || heroes[heroId]?.gender;
-
-      return heroes[heroId];
-    }
-
-    return null;
+  update(hero: Hero): Promise<UpdateResult> {
+    return this.heroRepository.update(hero.id, hero);
   }
 
-  findAll(): Hero[] {
-    return heroes;
+  delete(id: string): Promise<DeleteResult> {
+    return this.heroRepository.delete(id);
   }
 
-  findById(id: string): Hero {
-    return heroes.find((hero) => hero.id === id);
+  findAll(): Promise<Hero[]> {
+    return this.heroRepository.find();
   }
 
-  findByName(name: string): Hero {
-    if (!name) return null;
-    return heroes.find((hero) => hero.name === name);
+  findById(id: string): Promise<Hero> {
+    return this.heroRepository.findOne(id);
   }
 
-  remove(id: string): Hero {
-    const herosIndexToDelete = heroes.indexOf(
-      heroes.find((hero) => hero.id === id)
-    );
-    if (herosIndexToDelete === -1) return null;
-
-    const removedHeroes = heroes.splice(herosIndexToDelete, 1);
-
-    return removedHeroes.length ? removedHeroes[0] : null;
+  findByName(name: string): Promise<Hero[]> {
+    return this.heroRepository.find({ name });
   }
 
-  removeAll() {
-    heroes.splice(0, heroes.length);
+  remove(id: string): Promise<DeleteResult> {
+    return this.heroRepository.delete({ id });
+  }
+
+  removeAll(): Promise<void> {
+    return this.heroRepository.clear();
   }
 }

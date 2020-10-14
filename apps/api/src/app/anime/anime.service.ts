@@ -1,72 +1,45 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { Anime } from './anime.entity';
-import { CreateAnimeDTO } from './dto/create-anime.dto';
-import { UpdateAnimeDTO } from './dto/update-anime.dto';
-
-const animes: Anime[] = [
-  { id: '1', name: 'Fullmetal Alchemist: Brotherhood', score: 9.2, year: 2009 },
-  { id: '2', name: 'The Ghost in the Shell', score: 8.3, year: 1995 },
-];
 
 @Injectable()
 export class AnimeService {
-  private lastUserIndex = Number(animes[animes.length - 1].id) + 1;
+  constructor(
+    @InjectRepository(Anime)
+    private animeRepository: Repository<Anime>
+  ) {}
 
-  create(createAnimeDto: CreateAnimeDTO): Anime {
-    const anime = new Anime();
-    anime.id = String(this.lastUserIndex++);
-    anime.name = createAnimeDto.name;
-    anime.description = createAnimeDto?.description;
-    anime.score = createAnimeDto?.score;
-    anime.year = createAnimeDto?.year;
-
-    animes.push(anime);
-
-    return anime;
+  async create(anime: Anime): Promise<Anime> {
+    return await this.animeRepository.save(anime);
   }
 
-  update(id: string, updateAnimeDto: UpdateAnimeDTO): Anime {
-    const animeId = animes.findIndex((anime) => anime.id === id);
-
-    if (animeId > 0) {
-      animes[animeId].name = updateAnimeDto?.name || animes[animeId].name;
-      animes[animeId].description =
-        updateAnimeDto?.description || animes[animeId]?.description;
-      animes[animeId].score = updateAnimeDto?.score || animes[animeId]?.score;
-      animes[animeId].year = updateAnimeDto?.year || animes[animeId]?.year;
-
-      return animes[animeId];
-    }
-
-    return null;
+  update(anime: Anime): Promise<UpdateResult> {
+    return this.animeRepository.update(anime.id, anime);
   }
 
-  findAll(): Anime[] {
-    return animes;
+  delete(id: string): Promise<DeleteResult> {
+    return this.animeRepository.delete(id);
   }
 
-  findById(id: string): Anime {
-    return animes.find((anime) => anime.id === id);
+  findAll(): Promise<Anime[]> {
+    return this.animeRepository.find();
   }
 
-  findByName(name: string): Anime {
-    if (!name) return null;
-    return animes.find((anime) => anime.name === name);
+  findById(id: string): Promise<Anime> {
+    return this.animeRepository.findOne(id);
   }
 
-  remove(id: string): Anime {
-    const animesIndexToDelete = animes.indexOf(
-      animes.find((anime) => anime.id === id)
-    );
-    if (animesIndexToDelete === -1) return null;
-
-    const removedanimees = animes.splice(animesIndexToDelete, 1);
-
-    return removedanimees.length ? removedanimees[0] : null;
+  findByName(name: string): Promise<Anime[]> {
+    return this.animeRepository.find({ name });
   }
 
-  removeAll() {
-    animes.splice(0, animes.length);
+  remove(id: string): Promise<DeleteResult> {
+    return this.animeRepository.delete({ id });
+  }
+
+  removeAll(): Promise<void> {
+    return this.animeRepository.clear();
   }
 }

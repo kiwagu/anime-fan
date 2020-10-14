@@ -9,6 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 import { CreateHeroDTO } from './dto/create-hero.dto';
 import { UpdateHeroDTO } from './dto/update-hero.dto';
@@ -20,57 +21,64 @@ export class HeroController {
   constructor(private readonly heroService: HeroService) {}
 
   @Post()
-  create(@Body() createHeroDto: CreateHeroDTO): Hero {
-    if (!createHeroDto.name) {
-      throw new HttpException('Parameter Name must be defined', 400);
-    }
-    if (this.heroService.findByName(createHeroDto.name)) {
-      throw new HttpException(`Hero ${createHeroDto.name} already exist`, 400);
-    }
+  async create(@Body() createHeroDto: CreateHeroDTO): Promise<Hero> {
+    const hero = new Hero();
 
-    return this.heroService.create(createHeroDto);
+    hero.name = createHeroDto.name;
+    hero.description = createHeroDto?.description;
+    hero.age = createHeroDto?.age;
+    hero.gender = createHeroDto?.gender;
+
+    try {
+      return await this.heroService.create(hero);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateHeroDto: UpdateHeroDTO): Hero {
-    const heroById = this.heroService.findById(id);
-    const heroByName = this.heroService.findByName(updateHeroDto?.name);
+  async update(
+    @Param('id') id: string,
+    @Body() updateHeroDto: UpdateHeroDTO
+  ): Promise<UpdateResult> {
+    const existingHero = await this.heroService.findById(id);
 
-    if (
-      updateHeroDto?.name &&
-      heroByName?.id &&
-      heroById?.id &&
-      heroByName.id !== heroById.id &&
-      heroByName?.name === updateHeroDto.name
-    ) {
-      throw new HttpException(`Hero ${updateHeroDto.name} already exist`, 400);
+    if (!existingHero) {
+      throw new NotFoundException();
     }
 
-    const updatedHero = this.heroService.update(id, updateHeroDto);
-    if (updatedHero) return updatedHero;
+    const hero = new Hero();
 
-    throw new NotFoundException();
+    hero.id = existingHero.id;
+    hero.name = updateHeroDto?.name || existingHero.name;
+    hero.description =
+      updateHeroDto?.description || existingHero.description;
+    hero.age = updateHeroDto?.age || existingHero.age;
+    hero.gender = updateHeroDto?.gender || existingHero.gender;
+
+    try {
+      return await this.heroService.update(hero);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
   @Get()
-  findAll(): Hero[] {
-    return this.heroService.findAll();
+  async findAll(): Promise<Hero[]> {
+    return await this.heroService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Hero {
-    const foundHero = this.heroService.findById(id);
+  async findOne(@Param('id') id: string): Promise<Hero> {
+    const foundHero = await this.heroService.findById(id);
     if (foundHero) return foundHero;
 
     throw new NotFoundException();
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Hero {
-    const removedHero = this.heroService.remove(id);
-    if (removedHero) return removedHero;
-
-    throw new NotFoundException();
+  remove(@Param('id') id: string): Promise<DeleteResult> {
+    return this.heroService.remove(id);
   }
 
   @Delete()

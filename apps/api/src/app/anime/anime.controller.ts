@@ -9,6 +9,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 import { Anime } from './anime.entity';
 import { AnimeService } from './anime.service';
@@ -20,66 +21,64 @@ export class AnimeController {
   constructor(private readonly animeService: AnimeService) {}
 
   @Post()
-  create(@Body() createAnimeDto: CreateAnimeDTO): Anime {
-    if (!createAnimeDto.name) {
-      throw new HttpException('Parameter Name must be defined', 400);
-    }
-    if (this.animeService.findByName(createAnimeDto.name)) {
-      throw new HttpException(
-        `Anime ${createAnimeDto.name} already exist`,
-        400
-      );
-    }
+  async create(@Body() createAnimeDto: CreateAnimeDTO): Promise<Anime> {
+    const anime = new Anime();
 
-    return this.animeService.create(createAnimeDto);
+    anime.name = createAnimeDto.name;
+    anime.description = createAnimeDto?.description;
+    anime.score = createAnimeDto?.score;
+    anime.year = createAnimeDto?.year;
+
+    try {
+      return await this.animeService.create(anime);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateAnimeDto: UpdateAnimeDTO
-  ): Anime {
-    const animeById = this.animeService.findById(id);
-    const animeByName = this.animeService.findByName(updateAnimeDto?.name);
+  ): Promise<UpdateResult> {
+    const existingAnime = await this.animeService.findById(id);
 
-    if (
-      updateAnimeDto?.name &&
-      animeByName?.id &&
-      animeById?.id &&
-      animeByName.id !== animeById.id &&
-      animeByName?.name === updateAnimeDto.name
-    ) {
-      throw new HttpException(
-        `Anime ${updateAnimeDto.name} already exist`,
-        400
-      );
+    if (!existingAnime) {
+      throw new NotFoundException();
     }
 
-    const updatedAnime = this.animeService.update(id, updateAnimeDto);
-    if (updatedAnime) return updatedAnime;
+    const anime = new Anime();
 
-    throw new NotFoundException();
+    anime.id = existingAnime.id;
+    anime.name = updateAnimeDto?.name || existingAnime.name;
+    anime.description =
+      updateAnimeDto?.description || existingAnime.description;
+    anime.score = updateAnimeDto?.score || existingAnime.score;
+    anime.year = updateAnimeDto?.year || existingAnime.year;
+
+    try {
+      return await this.animeService.update(anime);
+    } catch (error) {
+      throw new HttpException(error.message, 500);
+    }
   }
 
   @Get()
-  findAll(): Anime[] {
-    return this.animeService.findAll();
+  async findAll(): Promise<Anime[]> {
+    return await this.animeService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Anime {
-    const foundAnime = this.animeService.findById(id);
+  async findOne(@Param('id') id: string): Promise<Anime> {
+    const foundAnime = await this.animeService.findById(id);
     if (foundAnime) return foundAnime;
 
     throw new NotFoundException();
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Anime {
-    const removedAnime = this.animeService.remove(id);
-    if (removedAnime) return removedAnime;
-
-    throw new NotFoundException();
+  remove(@Param('id') id: string): Promise<DeleteResult> {
+    return this.animeService.remove(id);
   }
 
   @Delete()
