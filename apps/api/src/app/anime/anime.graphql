@@ -1,0 +1,33 @@
+type Anime {
+  id: ID!
+  name: String!
+  description: String
+  score: Float
+  year: Int
+}
+
+type Query {
+  findAll: [Anime]!
+  findOne(id: ID!): Anime
+}
+
+input CreateAnimeDTO {
+  name: String!
+  description: String
+  score: Float
+  year: Int
+}
+
+input UpdateAnimeDTO {
+  name: String
+  description: String
+  score: Float
+  year: Int
+}
+
+type Mutation {
+  create(createAnimeInput: CreateAnimeDTO!): Anime
+  update(id:ID!, updateAnimeInput: UpdateAnimeDTO!): Anime
+  delete(id:ID!): Boolean
+  deleteAll: Boolean
+}

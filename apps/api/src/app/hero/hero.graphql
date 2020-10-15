@@ -1,0 +1,42 @@
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+type Hero {
+  id: ID!
+  name: String!
+  description: String
+  age: Int
+  gender: Gender
+  anime: Anime
+}
+
+type Query {
+  findAllHeroes: [Hero]!
+  findOneHero(id: ID!): Hero
+}
+
+input CreateHeroDTO {
+  name: String!
+  description: String
+  age: Int
+  gender: Gender
+  animeId: ID
+}
+
+input UpdateHeroDTO {
+  name: String
+  description: String
+  age: Int
+  gender: Gender
+  animeId: ID
+}
+
+type Mutation {
+  createHero(createHeroInput: CreateHeroDTO!): Hero
+  updateHero(id: ID!, updateHeroInput: UpdateHeroDTO!): Hero
+  deleteHero(id: ID!): Boolean
+  deleteAllHeroes: Boolean
+}

@@ -1,5 +1,7 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +20,12 @@ import { Hero } from './hero/hero.entity';
     }),
     HeroModule,
     AnimeModule,
+    GraphQLModule.forRoot({
+      typePaths: ['./**/*.graphql'],
+      definitions: {
+        path: join(process.cwd(), 'apps/api/src/app/graphql.ts'),
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
