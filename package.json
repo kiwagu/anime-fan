@@ -27,6 +27,7 @@
   },
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.2.4",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/graphql": "^7.7.0",

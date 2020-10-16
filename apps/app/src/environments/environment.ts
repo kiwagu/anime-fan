@@ -3,4 +3,5 @@
 
 export const environment = {
   production: false,
+  GRAPHQL_SERVER_URL: 'http://localhost:3333/graphql',
 };
