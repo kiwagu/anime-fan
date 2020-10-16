@@ -51,17 +51,17 @@ export interface Anime {
 }
 
 export interface IQuery {
-    findAll(): Anime[] | Promise<Anime[]>;
-    findOne(id: string): Anime | Promise<Anime>;
+    findAllAnimes(): Anime[] | Promise<Anime[]>;
+    findOneAnime(id: string): Anime | Promise<Anime>;
     findAllHeroes(): Hero[] | Promise<Hero[]>;
     findOneHero(id: string): Hero | Promise<Hero>;
 }
 
 export interface IMutation {
-    create(createAnimeInput: CreateAnimeDTO): Anime | Promise<Anime>;
-    update(id: string, updateAnimeInput: UpdateAnimeDTO): Anime | Promise<Anime>;
-    delete(id: string): boolean | Promise<boolean>;
-    deleteAll(): boolean | Promise<boolean>;
+    createAnime(createAnimeInput: CreateAnimeDTO): Anime | Promise<Anime>;
+    updateAnime(id: string, updateAnimeInput: UpdateAnimeDTO): Anime | Promise<Anime>;
+    deleteAnime(id: string): boolean | Promise<boolean>;
+    deleteAllAnimes(): boolean | Promise<boolean>;
     createHero(createHeroInput: CreateHeroDTO): Hero | Promise<Hero>;
     updateHero(id: string, updateHeroInput: UpdateHeroDTO): Hero | Promise<Hero>;
     deleteHero(id: string): boolean | Promise<boolean>;

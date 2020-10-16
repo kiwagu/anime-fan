@@ -11,17 +11,17 @@ export class AnimeResolver {
   constructor(private readonly animeService: AnimeService) {}
 
   @Query()
-  async findAll(): Promise<Anime[]> {
+  async findAllAnimes(): Promise<Anime[]> {
     return await this.animeService.findAll();
   }
 
   @Query()
-  async findOne(@Args('id') id: string): Promise<Anime> {
+  async findOneAnime(@Args('id') id: string): Promise<Anime> {
     return await this.animeService.findById(id);
   }
 
   @Mutation()
-  async create(
+  async createAnime(
     @Args('createAnimeInput') createAnimeDTO: CreateAnimeDTO
   ): Promise<Anime> {
     const anime = new Anime();
@@ -35,7 +35,7 @@ export class AnimeResolver {
   }
 
   @Mutation()
-  async update(
+  async updateAnime(
     @Args('id') id: string,
     @Args('updateAnimeInput') updateAnimeDTO: UpdateAnimeDTO
   ): Promise<Anime> {
@@ -60,14 +60,14 @@ export class AnimeResolver {
   }
 
   @Mutation()
-  async delete(@Args('id') id: string): Promise<boolean> {
+  async deleteAnime(@Args('id') id: string): Promise<boolean> {
     await this.animeService.remove(id);
 
     return true;
   }
 
   @Mutation()
-  async deleteAll(): Promise<boolean> {
+  async deleteAllAnimes(): Promise<boolean> {
     await this.animeService.removeAll();
 
     return true;

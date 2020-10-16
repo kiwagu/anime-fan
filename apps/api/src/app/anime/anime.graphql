@@ -7,8 +7,8 @@ type Anime {
 }
 
 type Query {
-  findAll: [Anime]!
-  findOne(id: ID!): Anime
+  findAllAnimes: [Anime]!
+  findOneAnime(id: ID!): Anime
 }
 
 input CreateAnimeDTO {
@@ -26,8 +26,8 @@ input UpdateAnimeDTO {
 }
 
 type Mutation {
-  create(createAnimeInput: CreateAnimeDTO!): Anime
-  update(id:ID!, updateAnimeInput: UpdateAnimeDTO!): Anime
-  delete(id:ID!): Boolean
-  deleteAll: Boolean
+  createAnime(createAnimeInput: CreateAnimeDTO!): Anime
+  updateAnime(id:ID!, updateAnimeInput: UpdateAnimeDTO!): Anime
+  deleteAnime(id:ID!): Boolean
+  deleteAllAnimes: Boolean
 }
