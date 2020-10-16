@@ -1,14 +1,18 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from '../utils/apollo-client';
+import { Route, Switch } from 'react-router-dom';
+
+import { Home, NotFound } from '@anime.fan/ui';
 
 import './app.scss';
 
 const App = () => (
   <ApolloProvider client={apolloClient}>
-    <div>
-      <h2>My first Apollo app 🚀</h2>
-    </div>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route component={NotFound} />
+    </Switch>
   </ApolloProvider>
 );
 
