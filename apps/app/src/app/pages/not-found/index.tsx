@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './not-found.scss';
+import './index.scss';
 
 /* eslint-disable-next-line */
 export interface NotFoundProps {}

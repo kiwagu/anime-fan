@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import Home from './home';
+import NotFound from './';
 
-describe('Home', () => {
+describe('NotFound', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Home />);
+    const { baseElement } = render(<NotFound />);
     expect(baseElement).toBeTruthy();
   });
 });

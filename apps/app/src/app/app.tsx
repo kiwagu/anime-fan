@@ -6,7 +6,7 @@ import { Container } from 'semantic-ui-react';
 
 import 'semantic-ui-css/semantic.min.css';
 
-import { Home, NotFound } from '@anime.fan/ui';
+import { Home, NotFound } from './pages';
 
 import './app.scss';
 

@@ -3,7 +3,8 @@ import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
 import { Grid } from 'semantic-ui-react';
 
-import './home.scss';
+import './index.scss';
+import { AnimeCard } from '@anime.fan/ui';
 
 /* eslint-disable-next-line */
 export interface HomeProps {}
@@ -25,7 +26,7 @@ export const Home = (props: HomeProps) => {
           animes &&
           animes.map((anime) => (
             <Grid.Column key={anime.id} style={{ marginBottom: 20 }}>
-              <p>X</p>
+              <AnimeCard anime={anime} />
             </Grid.Column>
           ))
         )}
