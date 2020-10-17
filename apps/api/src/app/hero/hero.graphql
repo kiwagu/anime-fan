@@ -9,7 +9,7 @@ type Hero {
   name: String!
   description: String
   age: Int
-  gender: Gender
+  gender: String # Replaced Gender for TypeORM compatibility
   anime: Anime
 }
 

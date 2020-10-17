@@ -1,8 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
+import { Anime as AnimeAbstract } from '@anime.fan/declarations';
+
 @Entity()
 @Unique(['name'])
-export class Anime {
+export class Anime implements AnimeAbstract {
   @PrimaryGeneratedColumn()
   id: string;
 

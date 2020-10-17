@@ -7,9 +7,11 @@ import {
 } from 'typeorm';
 import { Anime } from '../anime/anime.entity';
 
+import { Gender, Hero as HeroAbstract } from '@anime.fan/declarations';
+
 @Entity()
 @Unique(['name'])
-export class Hero {
+export class Hero implements HeroAbstract {
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -22,8 +24,8 @@ export class Hero {
   @Column({ nullable: true })
   age?: number;
 
-  @Column({ nullable: true })
-  gender?: 'male' | 'female' | 'other';
+  @Column({ nullable: true, enum: Gender })
+  gender?: string;
 
   @ManyToOne(() => Anime)
   anime?: Anime;

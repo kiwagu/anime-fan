@@ -23,7 +23,7 @@ import { Hero } from './hero/hero.entity';
     GraphQLModule.forRoot({
       typePaths: ['./**/*.graphql'],
       definitions: {
-        path: join(process.cwd(), 'apps/api/src/app/graphql.ts'),
+        path: join(process.cwd(), 'libs/declarations/graphql.ts'),
       },
     }),
   ],

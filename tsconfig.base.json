@@ -16,7 +16,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@anime.fan/ui": ["libs/ui/src/index.ts"]
+      "@anime.fan/ui": [
+        "libs/ui/src"
+      ],
+      "@anime.fan/declarations": [
+        "libs/declarations"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

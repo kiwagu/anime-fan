@@ -73,6 +73,6 @@ export interface Hero {
     name: string;
     description?: string;
     age?: number;
-    gender?: Gender;
+    gender?: string;
     anime?: Anime;
 }

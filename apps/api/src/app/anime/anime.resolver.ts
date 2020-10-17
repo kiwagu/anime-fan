@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 
+import type { CreateAnimeDTO, UpdateAnimeDTO } from '@anime.fan/declarations';
+
 import { Anime } from './anime.entity';
 import { AnimeService } from './anime.service';
-import { CreateAnimeDTO } from './dto/create-anime.dto';
-import { UpdateAnimeDTO } from './dto/update-anime.dto';
 
 @Resolver()
 export class AnimeResolver {

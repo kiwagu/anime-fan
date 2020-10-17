@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
+import type { CreateAnimeDTO, UpdateAnimeDTO } from '@anime.fan/declarations';
+
 import { Anime } from './anime.entity';
 import { AnimeService } from './anime.service';
-import { CreateAnimeDTO } from './dto/create-anime.dto';
-import { UpdateAnimeDTO } from './dto/update-anime.dto';
 
 @Controller('anime')
 export class AnimeController {

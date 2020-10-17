@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { AnimeService } from '../anime/anime.service';
-import { CreateHeroDTO } from './dto/create-hero.dto';
-import { UpdateHeroDTO } from './dto/update-hero.dto';
+
+import type { CreateHeroDTO, UpdateHeroDTO } from '@anime.fan/declarations';
 
 import { Hero } from './hero.entity';
 import { HeroService } from './hero.service';

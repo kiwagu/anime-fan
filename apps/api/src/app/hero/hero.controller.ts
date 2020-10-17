@@ -10,10 +10,10 @@ import {
   Put,
 } from '@nestjs/common';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { AnimeService } from '../anime/anime.service';
 
-import { CreateHeroDTO } from './dto/create-hero.dto';
-import { UpdateHeroDTO } from './dto/update-hero.dto';
+import type { CreateHeroDTO, UpdateHeroDTO } from '@anime.fan/declarations';
+
+import { AnimeService } from '../anime/anime.service';
 import { Hero } from './hero.entity';
 import { HeroService } from './hero.service';
 
