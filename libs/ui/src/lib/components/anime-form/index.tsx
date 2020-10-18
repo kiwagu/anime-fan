@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { Button, Form } from 'semantic-ui-react';
 
-import { CreateAnimeDTO } from '@anime.fan/declarations';
+import { Anime, CreateAnimeDTO } from '@anime.fan/declarations';
 
 import './index.scss';
-import { CREATE_ANIME_MUTATION } from '../../../graphql/anime';
+import {
+  CREATE_ANIME_MUTATION,
+  FETCH_ANIMES_QUERY,
+} from '../../../graphql/anime';
 
 /* eslint-disable-next-line */
 export interface AnimeFormProps {}
@@ -19,7 +22,17 @@ export const AnimeForm = (props: AnimeFormProps) => {
     variables: {
       createAnimeDTO: values,
     },
-    update(proxy, result) {
+    update(proxy, { data }) {
+      const { findAllAnimes } = proxy.readQuery<{ findAllAnimes: Anime[] }>({
+        query: FETCH_ANIMES_QUERY,
+      });
+      proxy.writeQuery<{ findAllAnimes: Anime[] }>({
+        query: FETCH_ANIMES_QUERY,
+        data: {
+          findAllAnimes: findAllAnimes.concat([data['createAnime']]),
+        },
+      });
+
       values.name = '';
       values.description = '';
       values.score = 0;
@@ -35,7 +48,6 @@ export const AnimeForm = (props: AnimeFormProps) => {
   const onSubmit = (event) => {
     event.preventDefault();
     createAnime();
-    window.location.href = '/';
   };
 
   return (
