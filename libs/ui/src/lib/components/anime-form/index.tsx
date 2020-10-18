@@ -18,6 +18,7 @@ export const AnimeForm = (props: AnimeFormProps) => {
     name: '',
   };
   const [values, setValues] = useState(createAnimeDTO);
+  const [isNameRequiredError, setNameRequiredError] = useState(false);
   const [createAnime, { error }] = useMutation(CREATE_ANIME_MUTATION, {
     variables: {
       createAnimeDTO: values,
@@ -44,45 +45,66 @@ export const AnimeForm = (props: AnimeFormProps) => {
       ...values,
       [event.target.name]: Number(event.target.value) || event.target.value,
     });
+
+    if (values.name) {
+      setNameRequiredError(false);
+    }
   };
   const onSubmit = (event) => {
     event.preventDefault();
+    if (!values.name) {
+      setNameRequiredError(true);
+      return;
+    }
     createAnime();
   };
 
   return (
-    <Form onSubmit={onSubmit}>
-      <h2>Create an anime:</h2>
-      <Form.Field>
-        <Form.Input
-          placeholder="Name"
-          name="name"
-          onChange={onChange}
-          value={values.name}
-        />
-        <Form.TextArea
-          placeholder="Description"
-          name="description"
-          onChange={onChange}
-          value={values.description}
-        />
-        <Form.Input
-          placeholder="Score"
-          name="score"
-          onChange={onChange}
-          value={Number(values.score) || ''}
-        />
-        <Form.Input
-          placeholder="Year"
-          name="year"
-          onChange={onChange}
-          value={Number(values.year) || ''}
-        />
-        <Button type="submit" color="teal">
-          Submit
-        </Button>
-      </Form.Field>
-    </Form>
+    <>
+      <Form onSubmit={onSubmit}>
+        <h2>Create an anime:</h2>
+        <Form.Field>
+          <Form.Input
+            placeholder="Name"
+            name="name"
+            onChange={onChange}
+            value={values.name}
+            error={isNameRequiredError}
+          />
+          <Form.TextArea
+            placeholder="Description"
+            name="description"
+            onChange={onChange}
+            value={values.description}
+          />
+          <Form.Input
+            placeholder="Score"
+            name="score"
+            onChange={onChange}
+            value={Number(values.score) || ''}
+          />
+          <Form.Input
+            placeholder="Year"
+            name="year"
+            onChange={onChange}
+            value={Number(values.year) || ''}
+          />
+          <Button type="submit" color="teal">
+            Submit
+          </Button>
+        </Form.Field>
+      </Form>
+      {
+        // TODO: implement reset db error message
+        error && (
+          <div className="ui error message">
+            <ul className="list">
+              <li>{error.graphQLErrors[0].message}</li>
+            </ul>
+          </div>
+        )
+      }
+    </>
   );
 };
 
