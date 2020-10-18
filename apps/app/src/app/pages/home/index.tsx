@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Transition } from 'semantic-ui-react';
 
 import { AnimeCard, AnimeForm, FETCH_ANIMES_QUERY } from '@anime.fan/ui';
 
@@ -27,12 +27,14 @@ export const Home = (props: HomeProps) => {
         {loading ? (
           <h1>Loading animes..</h1>
         ) : (
-          animes &&
-          animes.map((anime) => (
-            <Grid.Column key={anime.id} style={{ marginBottom: 20 }}>
-              <AnimeCard anime={anime} />
-            </Grid.Column>
-          ))
+          <Transition.Group>
+            {animes &&
+              animes.map((anime) => (
+                <Grid.Column key={anime.id} style={{ marginBottom: 20 }}>
+                  <AnimeCard anime={anime} />
+                </Grid.Column>
+              ))}
+          </Transition.Group>
         )}
       </Grid.Row>
     </Grid>

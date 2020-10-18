@@ -30,7 +30,7 @@ export const AnimeForm = (props: AnimeFormProps) => {
       proxy.writeQuery<{ findAllAnimes: Anime[] }>({
         query: FETCH_ANIMES_QUERY,
         data: {
-          findAllAnimes: findAllAnimes.concat([data['createAnime']]),
+          findAllAnimes: [data['createAnime'], ...findAllAnimes],
         },
       });
 
