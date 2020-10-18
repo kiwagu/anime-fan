@@ -1,9 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import { Grid } from 'semantic-ui-react';
 
-import { AnimeCard, AnimeForm } from '@anime.fan/ui';
+import { AnimeCard, AnimeForm, FETCH_ANIMES_QUERY } from '@anime.fan/ui';
 
 import './index.scss';
 
@@ -39,17 +38,5 @@ export const Home = (props: HomeProps) => {
     </Grid>
   );
 };
-
-const FETCH_ANIMES_QUERY = gql`
-  {
-    findAllAnimes {
-      id
-      name
-      description
-      score
-      year
-    }
-  }
-`;
 
 export default Home;
