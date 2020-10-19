@@ -29,3 +29,9 @@ export const DELETE_ANIME_MUTATION = gql`
     deleteAnime(id: $id)
   }
 `;
+
+export const DELETE_ALL_ANIME_MUTATION = gql`
+  mutation deleteAllAnimes {
+    deleteAllAnimes
+  }
+`;

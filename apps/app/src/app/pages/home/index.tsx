@@ -2,7 +2,12 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { Grid, Transition } from 'semantic-ui-react';
 
-import { AnimeCard, AnimeForm, FETCH_ANIMES_QUERY } from '@anime.fan/ui';
+import {
+  AnimeCard,
+  AnimeForm,
+  DeleteAllButton,
+  FETCH_ANIMES_QUERY,
+} from '@anime.fan/ui';
 
 import './index.scss';
 
@@ -17,7 +22,12 @@ export const Home = (props: HomeProps) => {
   return (
     <Grid columns={3}>
       <Grid.Row className="page-title">
-        <h1>Animes</h1>
+        <Grid.Column style={{ marginTop: 20 }}>
+          <h1>Animes</h1>
+        </Grid.Column>
+        <Grid.Column style={{ marginTop: 20 }}>
+          <DeleteAllButton />
+        </Grid.Column>
       </Grid.Row>
       <Grid.Row>
         <Grid.Column style={{ marginBottom: 20 }}>
