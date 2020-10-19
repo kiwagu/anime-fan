@@ -23,3 +23,9 @@ export const CREATE_ANIME_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_ANIME_MUTATION = gql`
+  mutation deleteAnime($id: ID!) {
+    deleteAnime(id: $id)
+  }
+`;

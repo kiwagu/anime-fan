@@ -4,6 +4,7 @@ import { Card, Label } from 'semantic-ui-react';
 import { Anime } from '@anime.fan/declarations';
 
 import './index.scss';
+import DeleteButton from '../delete-button';
 
 /* eslint-disable-next-line */
 export interface AnimeCardProps {
@@ -11,7 +12,7 @@ export interface AnimeCardProps {
 }
 
 export const AnimeCard = ({
-  anime: { name, description, score, year },
+  anime: { id, name, description, score, year },
 }: AnimeCardProps) => {
   return (
     <Card fluid>
@@ -32,6 +33,7 @@ export const AnimeCard = ({
         <Label basic color="teal" pointing="left">
           {year || '-'}
         </Label>
+        <DeleteButton animeId={id} />
       </Card.Content>
     </Card>
   );
